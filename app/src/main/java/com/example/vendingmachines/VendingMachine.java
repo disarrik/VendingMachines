@@ -1,5 +1,6 @@
 package com.example.vendingmachines;
 
+import com.example.vendingmachines.fabricsforproducts.IFabricForProduct;
 import com.example.vendingmachines.products.IProduct;
 
 import java.util.ArrayList;
@@ -10,10 +11,11 @@ public class VendingMachine {
     private ArrayList<IProduct> products;
     private Status status;
     private Student client;
-    private long clientNumber;
+    private int clientNumber;
     private int haveToPay;
     private int[] choose;
     private long cash;
+    private ArrayList<Student> queue;
 
     VendingMachine(String name) {
         this.name = name;
@@ -27,6 +29,14 @@ public class VendingMachine {
     public void addProducts(ArrayList<IProduct> newProducts) {
         if (status == status.DOINGNOTHING)
             products.addAll(newProducts);
+    }
+
+    public void addProducts(IFabricForProduct fabric, int amount) {
+        ArrayList<IProduct> newProducts = new ArrayList<IProduct>();
+        for (int i = 0; i < amount; i++) {
+            newProducts.add(fabric.create());
+        }
+        addProducts(newProducts);
     }
 
     public void startToWork(Student client) {
@@ -49,6 +59,7 @@ public class VendingMachine {
         cash += haveToPay;
         haveToPay = 0;
         status = status.ISDELIVERING;
+        //choose = new int[4];
     }
 
     public void delivering() {
@@ -63,6 +74,34 @@ public class VendingMachine {
         haveToPay = 0;
         clientNumber = 0;
         status = status.DOINGNOTHING;
+    }
+
+    public void setQueue(ArrayList<Student> queue) {
+        this.queue = queue;
+    }
+
+    public ArrayList<Student> getQueue(){
+        return queue;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public int getClientNumber() {
+        return clientNumber;
+    }
+
+    public int[] getChoose() {
+        return choose;
+    }
+
+    public ArrayList<IProduct> getProducts() {
+        return products;
     }
 }
 
