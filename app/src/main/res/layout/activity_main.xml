@@ -186,7 +186,7 @@
                     android:layout_height="match_parent"></Spinner>
 
                 <Spinner
-                    android:id="@+id/choosevendingMachine"
+                    android:id="@+id/chooseVendingMachine"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"></Spinner>
