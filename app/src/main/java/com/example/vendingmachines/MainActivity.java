@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 VendingMachineStatus2.setText(vendingMachine[0].getStatus().toString());
                 VendingMachineStudent2.setText(Integer.toString(vendingMachine[0].getClientNumber()));
                 String wantToBuy = "";
-                if (vendingMachine[0].getChoose() != null)
+                if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
                 for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
                     wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
                 }
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                 VendingMachineStatus3.setText(vendingMachine[0].getStatus().toString());
                 VendingMachineStudent3.setText(Integer.toString(vendingMachine[0].getClientNumber()));
                 String wantToBuy = "";
-                if ( vendingMachine[0].getChoose() != null)
+                if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
                 for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
                     wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
                 }
@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 VendingMachineStatus4.setText(vendingMachine[0].getStatus().toString());
                 VendingMachineStudent4.setText(Integer.toString(vendingMachine[0].getClientNumber()));
                 String wantToBuy = "";
-                if ( vendingMachine[0].getChoose() != null)
+                if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
                 for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
                     wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
                 }
