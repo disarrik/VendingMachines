@@ -160,8 +160,11 @@ public class MainActivity extends AppCompatActivity {
                         fabric = new TwixFabric();
                         break;
                 }
-                int amount = Integer.parseInt(AmountOfProducts.getText().toString());
-                if (amount == 0) amount = 1;
+                int amount;
+                if (AmountOfProducts.getText().toString().equals(""))
+                    amount = 1;
+                else
+                    amount = Integer.parseInt(AmountOfProducts.getText().toString());
                 switch (chooseVendingMachine.getSelectedItem().toString()) {
                     case "1":
                         vendingMachine1.addProducts(fabric, amount);
