@@ -1,0 +1,48 @@
+package com.example.vendingmachines;
+
+import com.example.vendingmachines.products.IProduct;
+
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+public class Student {
+    private int money;
+    private int number;
+
+    Student(int number, int money) {
+        this.money = money;
+        this.number = number;
+    }
+
+    public int getNumber() {
+        return this.number;
+    }
+
+    public int[] choose(ArrayList<IProduct> products) {
+        int[] list = new int[3];
+        do {
+            list[0] = (int) (Math.random() * products.size()) - 1;
+            do {
+                list[1] = (int) (Math.random() * products.size()) - 1;
+            }while (list[1] != list[0]);
+            do {
+                list[2] = (int) (Math.random() * products.size()) - 1;
+            }while ((list[2] != list[0]) && (list[2] != list[1]));
+            try {
+                TimeUnit.SECONDS.sleep(2); // Эмитация времени, что клиент тратит на выбор
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }while(products.get(list[0]).getCost() +  products.get(list[1]).getCost() + products.get(list[2]).getCost() <= money);
+        return list;
+    }
+
+    public void pay(int sum) {
+        money -= sum;
+        try {
+            TimeUnit.SECONDS.sleep(2); // Эмитация времени, что клиент тратит на оплату
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
