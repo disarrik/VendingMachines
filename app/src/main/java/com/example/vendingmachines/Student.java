@@ -23,12 +23,12 @@ public class Student {
         int[] list = new int[3];
         Random rand = new Random();
         do {
-            list[0] = (int) (rand.nextInt(products.size() - 1));
+            list[0] = (int) (rand.nextInt(products.size()));
             do {
-                list[1] = (int) (rand.nextInt(products.size() - 1));
+                list[1] = (int) (rand.nextInt(products.size()));
             }while (list[1] == list[0]);
             do {
-                list[2] = (int) (rand.nextInt(products.size() - 1));
+                list[2] = (int) (rand.nextInt(products.size()));
             }while ((list[2] == list[0]) || (list[2] == list[1]));
             try {
                 TimeUnit.SECONDS.sleep(2); // Эмитация времени, что клиент тратит на выбор

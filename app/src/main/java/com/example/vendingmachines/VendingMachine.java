@@ -59,21 +59,31 @@ public class VendingMachine {
         cash += haveToPay;
         haveToPay = 0;
         status = status.ISDELIVERING;
-        //choose = new int[4];
     }
 
     public void delivering() {
+        //сорировать по убыванию массив
+        for (int i = 0; i < 3; i++) {
+            for (int k = 0; k < 2-i; k++) {
+                if (choose[k] < choose[k+1]) {
+                    int tmp = choose[k];
+                    choose[k] = choose[k+1];
+                    choose[k+1] = tmp;
+                }
+            }
+        }
         for (int i = 0; i < 3; i++) {
             products.remove(choose[i]);
-            try {
-                TimeUnit.SECONDS.sleep(1); // Секунда на удаление товара
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        }
+        try {
+            TimeUnit.SECONDS.sleep(2); // 2 секунды на выдачу товара
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         haveToPay = 0;
         clientNumber = 0;
         status = status.DOINGNOTHING;
+        choose = new int[3];
     }
 
     public void setQueue(ArrayList<Student> queue) {
