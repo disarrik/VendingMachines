@@ -8,6 +8,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,6 +40,43 @@ public class MainActivity extends FragmentActivity {
     VendingMachineFragment fragment2 = VendingMachineFragment.newInstance();
     VendingMachineFragment fragment3 = VendingMachineFragment.newInstance();
     VendingMachineFragment fragment4 = VendingMachineFragment.newInstance();
+
+    Handler handler = new Handler() {   // создание хэндлера
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.getData().getString("name")) {
+                case "1":
+                    fragment1.setVendingMachineNameValue(msg.getData().getString("name"));
+                    fragment1.setVendingMachineStatusValue(msg.getData().getString("status"));
+                    fragment1.setVendingMachineStudentValue(msg.getData().getInt("student"));
+                    fragment1.setVendingMachineAmountOfProductsValue(msg.getData().getInt("productsAmount"));
+                    fragment1.setVendingMachineProductsListValue(msg.getData().getString("productsList"));
+                    break;
+                case "2":
+                    fragment2.setVendingMachineNameValue(msg.getData().getString("name"));
+                    fragment2.setVendingMachineStatusValue(msg.getData().getString("status"));
+                    fragment2.setVendingMachineStudentValue(msg.getData().getInt("student"));
+                    fragment2.setVendingMachineAmountOfProductsValue(msg.getData().getInt("productsAmount"));
+                    fragment2.setVendingMachineProductsListValue(msg.getData().getString("productsList"));
+                    break;
+
+                case "3":
+                    fragment3.setVendingMachineNameValue(msg.getData().getString("name"));
+                    fragment3.setVendingMachineStatusValue(msg.getData().getString("status"));
+                    fragment3.setVendingMachineStudentValue(msg.getData().getInt("student"));
+                    fragment3.setVendingMachineAmountOfProductsValue(msg.getData().getInt("productsAmount"));
+                    fragment3.setVendingMachineProductsListValue(msg.getData().getString("productsList"));
+                    break;
+                case "4":
+                    fragment4.setVendingMachineNameValue(msg.getData().getString("name"));
+                    fragment4.setVendingMachineStatusValue(msg.getData().getString("status"));
+                    fragment4.setVendingMachineStudentValue(msg.getData().getInt("student"));
+                    fragment4.setVendingMachineAmountOfProductsValue(msg.getData().getInt("productsAmount"));
+                    fragment4.setVendingMachineProductsListValue(msg.getData().getString("productsList"));
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,101 +208,62 @@ public class MainActivity extends FragmentActivity {
         generateStudents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VendingMachineLifeCycle lifeCycle1 = new VendingMachineLifeCycle();
-                VendingMachineLifeCycle lifeCycle2 = new VendingMachineLifeCycle();
-                VendingMachineLifeCycle lifeCycle3 = new VendingMachineLifeCycle();
-                VendingMachineLifeCycle lifeCycle4 = new VendingMachineLifeCycle();
-                lifeCycle1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vendingMachine1);
-                lifeCycle2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vendingMachine2);
-                lifeCycle3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vendingMachine3);
-                lifeCycle4.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vendingMachine4);
+                VendingMachineLifeCycle lifeCycle1 = new VendingMachineLifeCycle(vendingMachine1, handler);
+                VendingMachineLifeCycle lifeCycle2 = new VendingMachineLifeCycle(vendingMachine2, handler);
+                VendingMachineLifeCycle lifeCycle3 = new VendingMachineLifeCycle(vendingMachine3, handler);
+                VendingMachineLifeCycle lifeCycle4 = new VendingMachineLifeCycle(vendingMachine4, handler);
+                lifeCycle1.start();
+                lifeCycle2.start();
+                lifeCycle3.start();
+                lifeCycle4.start();
             }
         });
-
-
 
     }
 
 
 
 
-    class VendingMachineLifeCycle extends AsyncTask<VendingMachine, VendingMachine, Void> {
+    class VendingMachineLifeCycle extends Thread {
+        private VendingMachine vendingMachine;
+        private Handler handler;
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        public VendingMachineLifeCycle(VendingMachine vendingMachine, Handler handler) {
+            this.vendingMachine = vendingMachine;
+            this.handler = handler;
         }
 
         @Override
-        protected Void doInBackground(VendingMachine... vendingMachine) {
-            for (int i = 0; i < vendingMachine[0].getQueue().size(); i++) {
-                vendingMachine[0].startToWork(vendingMachine[0].getQueue().get(i));
-                publishProgress(vendingMachine[0]);
-                vendingMachine[0].workingWithAClient();
-                publishProgress(vendingMachine[0]);
-                vendingMachine[0].paying();
-                publishProgress(vendingMachine[0]);
-                vendingMachine[0].delivering();
-                publishProgress(vendingMachine[0]);
-            }
-            return null;
-        }
-
-
-        @Override
-        protected void onProgressUpdate(VendingMachine... vendingMachine) {
-            if (vendingMachine[0].getName().equals("1")) {
-                fragment1.setVendingMachineStatusValue(vendingMachine[0].getStatus().toString());
-                fragment1.setVendingMachineStudentValue(vendingMachine[0].getClientNumber());
-                String wantToBuy = "";
-                if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
-                for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
-                    wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
-                }
-                fragment1.setVendingMachineProductsListValue(wantToBuy);
-                fragment1.setVendingMachineAmountOfProductsValue(vendingMachine[0].getProducts().size());
-            }
-
-            if (vendingMachine[0].getName().equals("2")) {
-                fragment2.setVendingMachineStatusValue(vendingMachine[0].getStatus().toString());
-                fragment2.setVendingMachineStudentValue(vendingMachine[0].getClientNumber());
-                String wantToBuy = "";
-                if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
-                for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
-                    wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
-                }
-                fragment2.setVendingMachineProductsListValue(wantToBuy);
-                fragment2.setVendingMachineAmountOfProductsValue(vendingMachine[0].getProducts().size());
-            }
-
-            if (vendingMachine[0].getName().equals("3")) {
-                fragment3.setVendingMachineStatusValue(vendingMachine[0].getStatus().toString());
-                fragment3.setVendingMachineStudentValue(vendingMachine[0].getClientNumber());
-                String wantToBuy = "";
-                if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
-                for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
-                    wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
-                }
-                fragment3.setVendingMachineProductsListValue(wantToBuy);
-                fragment3.setVendingMachineAmountOfProductsValue(vendingMachine[0].getProducts().size());
-            }
-
-            if (vendingMachine[0].getName().equals("4")) {
-                fragment4.setVendingMachineStatusValue(vendingMachine[0].getStatus().toString());
-                fragment4.setVendingMachineStudentValue(vendingMachine[0].getClientNumber());
-                String wantToBuy = "";
-                if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
-                for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
-                    wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
-                }
-                fragment4.setVendingMachineProductsListValue(wantToBuy);
-                fragment4.setVendingMachineAmountOfProductsValue(vendingMachine[0].getProducts().size());
+        public void run() {
+            for (int i = 0; i < vendingMachine.getQueue().size(); i++) {
+                vendingMachine.startToWork(vendingMachine.getQueue().get(i));
+                publishProgress(vendingMachine);
+                vendingMachine.workingWithAClient();
+                publishProgress(vendingMachine);
+                vendingMachine.paying();
+                publishProgress(vendingMachine);
+                vendingMachine.delivering();
+                publishProgress(vendingMachine);
             }
         }
 
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
+
+        protected void publishProgress(VendingMachine vendingMachine) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("name", vendingMachine.getName());
+            bundle.putSerializable("status", vendingMachine.getStatus().toString());
+            bundle.putSerializable("student", vendingMachine.getClientNumber());
+            String wantToBuy = "";
+            if (vendingMachine.getChoose() != null && vendingMachine.getStatus() == com.example.vendingmachines.Status.ISPAYING)
+            for (int i = 0; i < vendingMachine.getChoose().length; i++) {
+                wantToBuy += vendingMachine.getProducts().get(vendingMachine.getChoose()[i]).getName() + " ";
+            }
+            bundle.putSerializable("productsList", wantToBuy);
+            bundle.putSerializable("productsAmount", vendingMachine.getProducts().size());
+            Message msg = new Message();
+            msg.setData(bundle);
+            handler.sendMessage(msg);
         }
+
     }
 }
