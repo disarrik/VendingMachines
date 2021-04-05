@@ -40,8 +40,7 @@ public class VendingMachineFragment extends
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vending_machine, container, false);
         ViewGroup.LayoutParams params = view.getLayoutParams();
-        params.width = 500;
-        params.height = 500;
+        params.height = 120;
         view.setLayoutParams(params);
         VendingMachineName = view.findViewById(R.id.VendingMachineName);
         VendingMachineStatus = view.findViewById(R.id.VendingMachineStatus);
@@ -52,13 +51,11 @@ public class VendingMachineFragment extends
             @Override
             public void onClick(View view) {
                 ViewGroup.LayoutParams params = view.getLayoutParams();
-                if (params.width == 500) {
-                    params.width = 700;
+                if (params.height == 120) {
                     params.height = 700;
                 }
                 else {
-                    params.width = 500;
-                    params.height = 500;
+                    params.height = 120;
                 }
                 view.setLayoutParams(params);
             }
