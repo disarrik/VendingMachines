@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -94,6 +95,9 @@ public class MainActivity extends FragmentActivity {
         transaction.add(R.id.fragmentContainer4, fragment4);
         transaction.commit();
 
+
+
+
         //создание выпадающего меню с продуктами
         chooseProduct = findViewById(R.id.chooseProduct);
         String[] products = {"CocaCola", "Lays", "Snickers", "Twix"};
@@ -115,6 +119,10 @@ public class MainActivity extends FragmentActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fragment1.setVendingMachineNameValue("1");
+                fragment2.setVendingMachineNameValue("2");
+                fragment3.setVendingMachineNameValue("3");
+                fragment4.setVendingMachineNameValue("4");
                 IFabricForProduct fabric = new CocaColaFabric();
                 switch (chooseProduct.getSelectedItem().toString()) {
                     case "CocaCola":

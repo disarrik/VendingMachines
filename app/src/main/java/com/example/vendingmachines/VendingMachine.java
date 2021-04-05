@@ -46,6 +46,9 @@ public class VendingMachine {
     }
 
     public void workingWithAClient() {
+        while(products.size() < 3) {
+            //Если в автомате меньше 3х продуктов, процесс выбора блокируется
+        }
         choose = client.choose(products);
         haveToPay = 0;
         for (int i = 0; i < 3; i++) {

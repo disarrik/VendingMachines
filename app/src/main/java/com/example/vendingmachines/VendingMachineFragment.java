@@ -39,12 +39,30 @@ public class VendingMachineFragment extends
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vending_machine, container, false);
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.width = 500;
+        params.height = 500;
+        view.setLayoutParams(params);
         VendingMachineName = view.findViewById(R.id.VendingMachineName);
         VendingMachineStatus = view.findViewById(R.id.VendingMachineStatus);
         VendingMachineStudent = view.findViewById(R.id.VendingMachineStudent);
         VendingMachineProductsList = view.findViewById(R.id.VendingMachineProductsList);
         VendingMachineAmountOfProducts = view.findViewById(R.id.VendingMachineAmountOfProducts);
-
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewGroup.LayoutParams params = view.getLayoutParams();
+                if (params.width == 500) {
+                    params.width = 700;
+                    params.height = 700;
+                }
+                else {
+                    params.width = 500;
+                    params.height = 500;
+                }
+                view.setLayoutParams(params);
+            }
+        });
         return view;
     }
 
