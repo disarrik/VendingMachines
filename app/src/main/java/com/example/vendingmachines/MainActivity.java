@@ -1,7 +1,11 @@
 package com.example.vendingmachines;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -20,31 +24,8 @@ import com.example.vendingmachines.fabricsforproducts.TwixFabric;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
-    TextView VendingMachineName1;
-    TextView VendingMachineStatus1;
-    TextView VendingMachineStudent1;
-    TextView VendingMachineProductsList1;
-    TextView VendingMachineAmountOfProducts1;
-
-    TextView VendingMachineName2;
-    TextView VendingMachineStatus2;
-    TextView VendingMachineStudent2;
-    TextView VendingMachineProductsList2;
-    TextView VendingMachineAmountOfProducts2;
-
-    TextView VendingMachineName3;
-    TextView VendingMachineStatus3;
-    TextView VendingMachineStudent3;
-    TextView VendingMachineProductsList3;
-    TextView VendingMachineAmountOfProducts3;
-
-    TextView VendingMachineName4;
-    TextView VendingMachineStatus4;
-    TextView VendingMachineStudent4;
-    TextView VendingMachineProductsList4;
-    TextView VendingMachineAmountOfProducts4;
 
     Spinner chooseProduct;
     Spinner chooseVendingMachine;
@@ -52,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     Button add;
     Button generateStudents;
 
+    VendingMachineFragment fragment1 = VendingMachineFragment.newInstance();
+    VendingMachineFragment fragment2 = VendingMachineFragment.newInstance();
+    VendingMachineFragment fragment3 = VendingMachineFragment.newInstance();
+    VendingMachineFragment fragment4 = VendingMachineFragment.newInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,31 +84,15 @@ public class MainActivity extends AppCompatActivity {
         vendingMachine4 = new VendingMachine("4");
         vendingMachine4.setQueue(studentGroup4);
 
-        //Инициализация виджетов
-        VendingMachineName1 = findViewById(R.id.VendingMachineName1);
-        VendingMachineName1.setText(vendingMachine1.getName());
-        VendingMachineStatus1 = findViewById(R.id.VendingMachineStatus1);
-        VendingMachineStudent1 = findViewById(R.id.VendingMachineStudent1);
-        VendingMachineProductsList1 = findViewById(R.id.VendingMachineProductsList1);
-        VendingMachineAmountOfProducts1 =  findViewById(R.id.VendingMachineAmountOfProducts1);
-        VendingMachineName2 = findViewById(R.id.VendingMachineName2);
-        VendingMachineName2.setText(vendingMachine2.getName());
-        VendingMachineStatus2 = findViewById(R.id.VendingMachineStatus2);
-        VendingMachineStudent2 = findViewById(R.id.VendingMachineStudent2);
-        VendingMachineProductsList2 = findViewById(R.id.VendingMachineProductsList2);
-        VendingMachineAmountOfProducts2 =  findViewById(R.id.VendingMachineAmountOfProducts2);
-        VendingMachineName3 = findViewById(R.id.VendingMachineName3);
-        VendingMachineName3.setText(vendingMachine3.getName());
-        VendingMachineStatus3 = findViewById(R.id.VendingMachineStatus3);
-        VendingMachineStudent3 = findViewById(R.id.VendingMachineStudent3);
-        VendingMachineProductsList3 = findViewById(R.id.VendingMachineProductsList3);
-        VendingMachineAmountOfProducts3 =  findViewById(R.id.VendingMachineAmountOfProducts3);
-        VendingMachineName4 = findViewById(R.id.VendingMachineName4);
-        VendingMachineName4.setText(vendingMachine4.getName());
-        VendingMachineStatus4 = findViewById(R.id.VendingMachineStatus4);
-        VendingMachineStudent4 = findViewById(R.id.VendingMachineStudent4);
-        VendingMachineProductsList4 = findViewById(R.id.VendingMachineProductsList4);
-        VendingMachineAmountOfProducts4 =  findViewById(R.id.VendingMachineAmountOfProducts4);
+        //инициализация фрагментов
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        transaction.add(R.id.fragmentContainer1, fragment1);
+        transaction.add(R.id.fragmentContainer2, fragment2);
+        transaction.add(R.id.fragmentContainer3, fragment3);
+        transaction.add(R.id.fragmentContainer4, fragment4);
+        transaction.commit();
 
         //создание выпадающего меню с продуктами
         chooseProduct = findViewById(R.id.chooseProduct);
@@ -168,19 +137,19 @@ public class MainActivity extends AppCompatActivity {
                 switch (chooseVendingMachine.getSelectedItem().toString()) {
                     case "1":
                         vendingMachine1.addProducts(fabric, amount);
-                        VendingMachineAmountOfProducts1.setText(Integer.toString(vendingMachine1.getProducts().size()));
+                        fragment1.setVendingMachineAmountOfProductsValue(vendingMachine1.getProducts().size());
                         break;
                     case "2":
                         vendingMachine2.addProducts(fabric, amount);
-                        VendingMachineAmountOfProducts2.setText(Integer.toString(vendingMachine2.getProducts().size()));
+                        fragment2.setVendingMachineAmountOfProductsValue(vendingMachine2.getProducts().size());
                         break;
                     case "3":
                         vendingMachine3.addProducts(fabric, amount);
-                        VendingMachineAmountOfProducts3.setText(Integer.toString(vendingMachine3.getProducts().size()));
+                        fragment3.setVendingMachineAmountOfProductsValue(vendingMachine3.getProducts().size());
                         break;
                     case "4":
                         vendingMachine4.addProducts(fabric, amount);
-                        VendingMachineAmountOfProducts4.setText(Integer.toString(vendingMachine4.getProducts().size()));
+                        fragment4.setVendingMachineAmountOfProductsValue(vendingMachine4.getProducts().size());
                         break;
                 }
 
@@ -236,51 +205,51 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(VendingMachine... vendingMachine) {
             if (vendingMachine[0].getName().equals("1")) {
-                VendingMachineStatus1.setText(vendingMachine[0].getStatus().toString());
-                VendingMachineStudent1.setText(Integer.toString(vendingMachine[0].getClientNumber()));
+                fragment1.setVendingMachineStatusValue(vendingMachine[0].getStatus().toString());
+                fragment1.setVendingMachineStudentValue(vendingMachine[0].getClientNumber());
                 String wantToBuy = "";
                 if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
                 for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
                     wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
                 }
-                VendingMachineProductsList1.setText(wantToBuy);
-                VendingMachineAmountOfProducts1.setText(Integer.toString(vendingMachine[0].getProducts().size()));
+                fragment1.setVendingMachineProductsListValue(wantToBuy);
+                fragment1.setVendingMachineAmountOfProductsValue(vendingMachine[0].getProducts().size());
             }
 
             if (vendingMachine[0].getName().equals("2")) {
-                VendingMachineStatus2.setText(vendingMachine[0].getStatus().toString());
-                VendingMachineStudent2.setText(Integer.toString(vendingMachine[0].getClientNumber()));
+                fragment2.setVendingMachineStatusValue(vendingMachine[0].getStatus().toString());
+                fragment2.setVendingMachineStudentValue(vendingMachine[0].getClientNumber());
                 String wantToBuy = "";
                 if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
                 for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
                     wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
                 }
-                VendingMachineProductsList2.setText(wantToBuy);
-                VendingMachineAmountOfProducts2.setText(Integer.toString(vendingMachine[0].getProducts().size()));
+                fragment2.setVendingMachineProductsListValue(wantToBuy);
+                fragment2.setVendingMachineAmountOfProductsValue(vendingMachine[0].getProducts().size());
             }
 
             if (vendingMachine[0].getName().equals("3")) {
-                VendingMachineStatus3.setText(vendingMachine[0].getStatus().toString());
-                VendingMachineStudent3.setText(Integer.toString(vendingMachine[0].getClientNumber()));
+                fragment3.setVendingMachineStatusValue(vendingMachine[0].getStatus().toString());
+                fragment3.setVendingMachineStudentValue(vendingMachine[0].getClientNumber());
                 String wantToBuy = "";
                 if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
                 for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
                     wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
                 }
-                VendingMachineProductsList3.setText(wantToBuy);
-                VendingMachineAmountOfProducts3.setText(Integer.toString(vendingMachine[0].getProducts().size()));
+                fragment3.setVendingMachineProductsListValue(wantToBuy);
+                fragment3.setVendingMachineAmountOfProductsValue(vendingMachine[0].getProducts().size());
             }
 
             if (vendingMachine[0].getName().equals("4")) {
-                VendingMachineStatus4.setText(vendingMachine[0].getStatus().toString());
-                VendingMachineStudent4.setText(Integer.toString(vendingMachine[0].getClientNumber()));
+                fragment4.setVendingMachineStatusValue(vendingMachine[0].getStatus().toString());
+                fragment4.setVendingMachineStudentValue(vendingMachine[0].getClientNumber());
                 String wantToBuy = "";
                 if (vendingMachine[0].getChoose() != null && vendingMachine[0].getStatus() == com.example.vendingmachines.Status.ISPAYING)
                 for (int i = 0; i < vendingMachine[0].getChoose().length; i++) {
                     wantToBuy += vendingMachine[0].getProducts().get(vendingMachine[0].getChoose()[i]).getName() + " ";
                 }
-                VendingMachineProductsList4.setText(wantToBuy);
-                VendingMachineAmountOfProducts4.setText(Integer.toString(vendingMachine[0].getProducts().size()));
+                fragment4.setVendingMachineProductsListValue(wantToBuy);
+                fragment4.setVendingMachineAmountOfProductsValue(vendingMachine[0].getProducts().size());
             }
         }
 
